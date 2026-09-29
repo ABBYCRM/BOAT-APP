@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#061014" />
+<title>BOAT APP · Vessel Intel Desk</title>
+<link rel="stylesheet" href="styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+<div class="wrap">
+  <header class="app">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div>
+        <h1>BOAT APP</h1>
+        <p>CaseClosed Scout · Vessel Intel Desk · Florida Ch. 328</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="ghost" id="sampleBtn" type="button">Sample</button>
+      <button class="ghost" id="resetBtn" type="button">Reset</button>
+      <button class="ghost" id="copyBtn" type="button">Copy packet</button>
+      <button class="ghost" id="jsonBtn" type="button">Export JSON</button>
+      <button class="primary" id="printBtn" type="button">Print</button>
+    </div>
+  </header>
+  <nav class="tabs" id="tabs">
+    <button class="on" data-tab="intake">Intake</button>
+    <button data-tab="decode">Decode</button>
+    <button data-tab="launch">Lookups</button>
+    <button data-tab="capture">Capture</button>
+    <button data-tab="owners">Owners / 90510</button>
+    <button data-tab="packet">Packet</button>
+  </nav>
+  <section id="intake" class="grid two">
+    <div class="card"><h2>Case file</h2>
+      <div class="row r2">
+        <div><label>File / case ref</label><input id="caseRef" placeholder="CCFL-2026-0912" /></div>
+        <div><label>Incident date</label><input id="incidentDate" type="date" /></div>
+        <div><label>County</label><select id="county"></select></div>
+        <div><label>Zip for comps</label><input id="zip" inputmode="numeric" placeholder="33063" /></div>
+      </div>
+    </div>
+    <div class="card"><h2>Identifiers</h2>
+      <div class="row r2">
+        <div><label>HIN</label><input id="hin" class="mono" placeholder="GDY12345B819" /></div>
+        <div><label>FL number</label><input id="flNumber" class="mono" placeholder="FL 4252 AF" /></div>
+        <div><label>Title number</label><input id="titleNumber" /></div>
+        <div><label>USCG official number</label><input id="officialNumber" /></div>
+        <div><label>Vessel name</label><input id="vesselName" /></div>
+        <div><label>Hull material</label><select id="hullMaterial"><option value=""></option><option>Fiberglass</option><option>Aluminum</option><option>Steel</option><option>Wood</option><option>Composite</option><option>Other</option></select></div>
+      </div>
+    </div>
+    <div class="card"><h2>Vessel + engine</h2>
+      <div class="row r3">
+        <div><label>Year</label><input id="year" inputmode="numeric" maxlength="4" /></div>
+        <div><label>Make</label><input id="make" /></div>
+        <div><label>Model</label><input id="model" /></div>
+        <div><label>Length (ft)</label><input id="lengthFt" inputmode="decimal" /></div>
+        <div><label>Propulsion</label><select id="propulsion"><option value=""></option><option>Outboard</option><option>Stern drive</option><option>Inboard</option><option>Jet</option><option>PWC</option><option>Other</option></select></div>
+        <div><label>Condition</label><select id="condition"><option value=""></option><option>Poor</option><option>Fair</option><option>Good</option><option>Excellent</option></select></div>
+        <div><label>Engine make</label><input id="engineMake" /></div>
+        <div><label>HP</label><input id="engineHp" inputmode="numeric" /></div>
+        <div><label>Engine hours</label><input id="engineHours" inputmode="numeric" /></div>
+      </div>
+      <div style="margin-top:10px"><label>Notes</label><textarea id="notes"></textarea></div>
+    </div>
+    <div class="card"><h2>Live status</h2>
+      <div class="statrow" id="statusPills"></div>
+      <div class="kv" id="statusKv"></div>
+      <p class="hint">Owner names are not public. Form 90510 lists owners in order.</p>
+    </div>
+  </section>
+  <section id="decode" class="grid two hidden">
+    <div class="card"><h2>HIN decode</h2><div id="hinDecode"></div></div>
+    <div class="card"><h2>Florida class + fee</h2><div id="flClassBox"></div></div>
+  </section>
+  <section id="launch" class="hidden"><div class="card"><div class="banner">Official sites open in a new tab. Paste results into Capture. No owner-PII scrape.</div><div class="links" id="launchLinks"></div></div></section>
+  <section id="capture" class="grid two hidden">
+    <div class="card"><h2>MVCheck / title capture</h2>
+      <div class="row r2">
+        <div><label>Title status</label><input id="titleStatus" /></div>
+        <div><label>Registration status</label><input id="registrationStatus" /></div>
+        <div><label>Registration expiration</label><input id="registrationExpiration" /></div>
+        <div><label>Owner count on title</label><input id="ownerCount" inputmode="numeric" /></div>
+        <div><label>Lien present</label><select id="lienPresent"><option value=""></option><option>Yes</option><option>No</option><option>Unknown</option></select></div>
+        <div><label>Lienholder</label><input id="lienholder" /></div>
+      </div>
+    </div>
+    <div class="card"><h2>NADA / J.D. Power + market</h2>
+      <div class="row r2">
+        <div><label>JDP low retail</label><input id="nadaLow" inputmode="decimal" /></div>
+        <div><label>JDP avg retail</label><input id="nadaAvg" inputmode="decimal" /></div>
+        <div><label>JDP high retail</label><input id="nadaHigh" inputmode="decimal" /></div>
+        <div><label>JDP trade-in</label><input id="nadaTradeIn" inputmode="decimal" /></div>
+        <div><label>Market low</label><input id="marketLow" inputmode="decimal" /></div>
+        <div><label>Market avg</label><input id="marketAvg" inputmode="decimal" /></div>
+        <div><label>Market high</label><input id="marketHigh" inputmode="decimal" /></div>
+        <div><label>Working value</label><input id="workingValue" inputmode="decimal" /></div>
+      </div>
+    </div>
+  </section>
+  <section id="owners" class="hidden">
+    <div class="card">
+      <div class="banner">Form HSMV 90510 Title History Printout ($1) lists owners in order. DPPA exemption required for personal info.</div>
+      <div class="row r2">
+        <div><label>Requester name</label><input id="reqName" /></div>
+        <div><label>Requester phone</label><input id="reqPhone" /></div>
+        <div><label>Requester email</label><input id="reqEmail" type="email" /></div>
+        <div><label>DPPA use</label><select id="dppaUse"><option value=""></option><option>Litigation / court process</option><option>Insurance claim investigation</option><option>Fraud / debt / security interest</option><option>Law enforcement</option><option>Written owner consent attached</option><option>Other permissible use</option></select></div>
+      </div>
+      <div class="owners" id="ownerRows"></div>
+      <div class="actions" style="margin-top:10px"><button type="button" id="addOwner">Add owner</button>
+        <a class="btn" href="https://www.flhsmv.gov/pdf/forms/90510.pdf" target="_blank" rel="noopener">Open form 90510</a></div>
+      <h2 style="margin-top:18px">90510 checklist</h2>
+      <pre class="packet" id="formPacket"></pre>
+    </div>
+  </section>
+  <section id="packet" class="hidden"><div class="card"><h2>Complete parameter dump</h2><pre class="packet" id="fullPacket"></pre></div></section>
+  <footer class="dis">CaseClosed Scout is not a law firm. No legal advice. Owner PII is DPPA-restricted.</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
